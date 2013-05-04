@@ -32,11 +32,12 @@ class ResourceManager:
 
     def loadImage(self, name, path, key=None):
         """Loads an image with a name at a given path, and gives it a colorkey"""
-        t = pygame.image.load(path).convert()
-        if key == None:
-            t = t.convert_alpha()
-        else:
+
+        if key != None:
+            t = pygame.image.load(path).convert()
             t.set_colorkey(key)
+        else:
+            t = pygame.image.load(path).convert_alpha()
         self.images[name]=t
 
     def getImage(self,name,copy=True):

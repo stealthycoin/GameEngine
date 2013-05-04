@@ -27,7 +27,6 @@ class Sprite:
         self.position += self.velocity * dtimeSeconds
         
     def draw(self,screen):
-        print(self.position.tolist())
         screen.blit(self.anim.getFrame().img,self.position.tolist())
         #() tuple a list that can't be modified
 
