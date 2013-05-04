@@ -9,7 +9,7 @@ class GameManager:
         self.rm=ResourceManager()
         self.size=size
         self.x=0
-        self.W=World.World(size,self.rm)
+        self.World = self.rm.loadMap("test.map")
         self.im = im #copy the input manager passed to us by the core
 
     
@@ -32,11 +32,11 @@ class GameManager:
             # not True -> False
 
         if self.reset.getAmount() > 0:
-            self.W.reset()
+            self.World.reset()
 
         if not self.paused: #only update the world if we are not paused
-            self.W.update(dtime)
+            self.World.update(dtime)
 
     def draw(self,screen):
         pygame.draw.rect(screen,[0,0,0],[0,0,self.size[0],self.size[1]])
-        self.W.draw(screen)
+        self.World.draw(screen)
