@@ -9,7 +9,7 @@ running = True
 screen_width=1300
 screen_height=700
 screen=pygame.display.set_mode([screen_width,screen_height])
-pygame.display.set_caption("I love Monkeys... and turtles")
+pygame.display.set_caption("Logistix")
 
 try:
     im=InputManager.InputManager()

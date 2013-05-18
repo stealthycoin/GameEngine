@@ -55,30 +55,44 @@ class Gate(Sprite):
 class And(Gate):
     def __init__(self,a):
         super(And,self).__init__(a)
+    def trans(self):
+        return 6
 
 class Or(Gate):
     def __init__(self,a):
         super(Or,self).__init__(a)
+    def trans(self):
+        return 6
 
 class Not(Gate):
     def __init__(self,a):
         super(Not,self).__init__(a)
+    def trans(self):
+        return 2
 
 class Xor(Gate):
     def __init__(self,a):
         super(Xor,self).__init__(a)
+    def trans(self):
+        return 6
 
 class Nand(Gate):
     def __init__(self,a):
         super(Nand,self).__init__(a)
+    def trans(self):
+        return 4
 
 class Nor(Gate):
     def __init__(self,a):
         super(Nor,self).__init__(a)
+    def trans(self):
+        return 4
 
 class Xnor(Gate):
     def __init__(self,a):
         super(Xnor,self).__init__(a)
+    def trans(self):
+        return 6
 
 class Bulb(Sprite):
     def __init__(self,a):

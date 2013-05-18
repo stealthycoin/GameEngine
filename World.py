@@ -16,9 +16,20 @@ class World:
 
     def update(self,dtime):
         self.d.update(dtime)
+
         if self.lastFrame == 0 and self.im.buttons[1] == 1:
-            #mouse pressed down
+            #mouse pressed down, try to grab something from dispensor
             self.floating = self.d.click(self.im.getMouseX(),self.im.getMouseY())
+            if self.floating == None:
+                #try to get a sprite from the game world
+                for s in self.sprites:
+                    if s.containsPoint(self.im.getMouseX(), self.im.getMouseY()):
+                        self.floating = s
+                        break
+                if self.floating != None:
+                    self.sprites.remove(self.floating)
+                        
+                        
             if self.floating:
                 self.offset[0] = self.im.getMouseX() - self.floating.position[0]
                 self.offset[1] = self.im.getMouseY() - self.floating.position[1]
@@ -29,13 +40,16 @@ class World:
         elif self.floating != None and self.lastFrame == 1 and self.im.buttons[1] == 0:
             #mouse released, place item
             if self.d.containsPoint(self.im.getMouseX(), self.im.getMouseY()):
+                self.d.transistors += self.floating.trans()
                 self.floating = None
+                
             else:
                 self.sprites.append(self.floating)
                 self.floating = None
 
         for s in self.sprites:
             s.update(dtime)
+
         self.lastFrame=self.im.buttons[1]
 
 
