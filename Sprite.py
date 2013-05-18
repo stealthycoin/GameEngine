@@ -20,8 +20,12 @@ class Sprite:
         self.position = np.array([0,0])
 
 
-    def __deepcopy__(self,memo)
-        
+    def __deepcopy__(self,memo):
+        newone = type(self)(copy.deepcopy(self.anim))
+        newone.acceleration = copy.deepcopy(self.acceleration)
+        newone.velocity = copy.deepcopy(self.velocity)
+        newone.position = copy.deepcopy(self.position)
+        return newone
         
     def update(self,dtime):
         self.anim.update(dtime)

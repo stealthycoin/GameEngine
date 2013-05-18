@@ -18,6 +18,10 @@ class Dispensor:
             s.position[1]=self.bounds[1]+y
             y += s.anim.getFrame().img.get_height()+padding 
             
+    def containsPoint(self, x, y):
+        if x < self.bounds[0] or y < self.bounds[1] or x > self.bounds[0] + self.bounds[2] or y > self.bounds[1] + self.bounds[3]:
+            return False
+        return True
 
     def update(self,dtime):
         pass
@@ -31,7 +35,7 @@ class Dispensor:
     def click(self,x,y):
         for g in self.gates:
             if g.containsPoint(x,y):
-                return copy.deep(g)
+                return copy.deepcopy(g)
             
 
     

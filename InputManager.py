@@ -10,7 +10,7 @@ class InputManager:
         self.keyActions = {}
         self.mouseActions = {}
         self.buttons = {1:0}
-        self.mouse = [0,0]
+        self.mouse = [0.0,0.0]
 
     def getMouseX(self):
         return self.mouse[0]
@@ -20,7 +20,6 @@ class InputManager:
 
     def process(self, event):
         """this takes in raw pygame events and figures out what to do with them"""
-        print(self.buttons)
         if event.type == pygame.KEYDOWN:
             self.keyPressed(event.key)
         elif event.type == pygame.KEYUP:
