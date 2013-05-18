@@ -1,5 +1,6 @@
 import pygame
 import Sprite
+import copy
 
 
 class Dispensor:
@@ -25,6 +26,12 @@ class Dispensor:
         pygame.draw.rect(s,(0,0,200),self.bounds)
         for g in self.gates:
             g.draw(s)
+
+
+    def click(self,x,y):
+        for g in self.gates:
+            if g.containsPoint(x,y):
+                return copy.deep(g)
             
 
     

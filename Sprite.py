@@ -2,6 +2,7 @@ import pygame
 import random as r
 import Animation
 import numpy as np #now using numpy library
+import copy
 
 class Sprite:
     def __init__(self,ioa):
@@ -17,6 +18,9 @@ class Sprite:
         self.velocity = np.array([0.0,0.0])
         #position vector
         self.position = np.array([0,0])
+
+
+    def __deepcopy__(self,memo)
         
         
     def update(self,dtime):
@@ -29,6 +33,12 @@ class Sprite:
     def draw(self,screen):
         screen.blit(self.anim.getFrame().img,self.position.tolist())
         #() tuple a list that can't be modified
+
+
+    def containsPoint(self,x,y):
+        if x < self.position[0] or x > self.position[0] + self.anim.getFrame().img.get_width() or y < self.position[1] or y > self.position[1] + self.anim.getFrame().img.get_height():
+            return False
+        return True
 
     
         #Logic gates

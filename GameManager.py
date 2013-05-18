@@ -11,6 +11,7 @@ class GameManager:
         self.x=0
         self.World = self.rm.loadMap("test.map")
         self.im = im #copy the input manager passed to us by the core
+        self.World.im = self.im
 
     
         
