@@ -1,2 +1,7 @@
 Transistors: 20
-Stock:[		And,  Or,Not,xor]
+Stock:[And,Or,Not,xor]
+source (200,300)
+sink (800,300)
+gate (and,400,350)
+gate (xor,400,600)
+gate (nand,400,475)
