@@ -17,7 +17,7 @@ class Sprite:
         #velocity vector
         self.velocity = np.array([0.0,0.0])
         #position vector
-        self.position = np.array([0,0])
+        self.position = np.array([0.0,0.0])
 
         self.fixed = True
 
@@ -31,11 +31,10 @@ class Sprite:
         
     def update(self,dtime):
         self.anim.update(dtime)
-
         dtimeSeconds = dtime / 1000.0
         self.velocity += self.acceleration * dtimeSeconds
         self.position += self.velocity * dtimeSeconds
-        
+
     def draw(self,screen):
         screen.blit(self.anim.getFrame().img,self.position.tolist())
         #() tuple a list that can't be modified

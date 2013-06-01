@@ -55,6 +55,8 @@ class World:
 
 
 
+        for s in self.sprites:
+            s.velocity = np.array([0.0,0.0])
 
         for i in range(len(self.sprites)):
             for j in range(i):
@@ -76,32 +78,17 @@ class World:
     def repel(self, i, j):
         def d (a, b):
             return np.linalg.norm(a-b)
-        def f (v):
-            if v != 0:
-                return 1.0/v;
-            return 4;
 
         i = self.sprites[i]
         j = self.sprites[j]
         if i.cornerCollide(j) or j.cornerCollide(i):
-            ic = np.array(i.center())
-            jc = np.array(j.center())
-            
-            ji = ic - jc
-            ji = -1.0/np.linalg.norm(ji) * ji
-            ji = f(1.0/d(ic,jc)) * ji
-            j.velocity = ji
-            
-            ij = jc - ic
-            ij = -1.0/np.linalg.norm(ij) * ij
-            ij = f(1.0/d(ic,jc)) * ij
-            i.velocity = ij
-            
-        else:
-            i.velocity[0]=0
-            i.velocity[1]=0
-            j.velocity[0]=0
-            j.velocity[1]=0
+            ic = np.array(i.center()) #center of i
+            jc = np.array(j.center()) #center of j
+            ji = ic - jc #vector from j to i
+            ji = -1.0/np.linalg.norm(ji) * ji #change ji to unit vector and reverse the direction
+            ji *= max(1.0, 100.0 - d(ic,jc)) #scale ji up again based on the distance between the centers (closer is faster)
+            j.velocity += ji #make one sprite go along the vector
+            i.velocity += -1.0 * ji #the otehr goes in the opposite direction
     
         
 

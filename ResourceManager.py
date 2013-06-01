@@ -30,7 +30,7 @@ class ResourceManager:
         self.loadImage("xnor","./resources/images/xnor.png")
         self.loadImage("offbulb","./resources/images/offbulb.jpg")
         self.loadImage("Sink","./resources/images/Sink.jpg")
-        self.loadImage("Source","./resources/images/Source.jpg")
+        self.loadImage("Source","./resources/images/Source.png")
 
     def loadImage(self, name, path, key=None):
         """Loads an image with a name at a given path, and gives it a colorkey"""
