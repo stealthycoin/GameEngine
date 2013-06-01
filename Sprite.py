@@ -47,23 +47,23 @@ class Sprite:
         return True
 
     def cornerCollide(self,s):
-        P1 = (self.position[0],self.positon[1])
-        if s.containsPoint(P1):
+        P1 = (self.position[0],self.position[1])
+        if s.containsPoint(P1[0],P1[1]):
             return True
-        P2 = (self.position[0] + self.anim.getFrame().img.get_width(),self.postion[1])
-        if s.containsPoint(P2):
+        P2 = (self.position[0] + self.anim.getFrame().img.get_width(),self.position[1])
+        if s.containsPoint(P2[0],P2[1]):
             return True
-        P3 = (self.position[0],self.positon[1] + self.anim.getFrame().img.get_height())
-        if s.containsPoint(P3):
+        P3 = (self.position[0],self.position[1] + self.anim.getFrame().img.get_height())
+        if s.containsPoint(P3[0],P3[1]):
             return True
-        P4 = (self.position[0] + self.anim.getFrame().img.get_width(),self.positon[1] + self.anim.getFrame().img.get_height())
-        if s.containsPoint(P4):
+        P4 = (self.position[0] + self.anim.getFrame().img.get_width(),self.position[1] + self.anim.getFrame().img.get_height())
+        if s.containsPoint(P4[0],P4[1]):
             return True
 
         return False
 
     def center(self):
-        return (self.position[0]+sel.anim.getFrame().img.get_width()/2.0,self.position[1]+sel.anim.getFrame().img.get_height()/2.0)
+        return (self.position[0]+self.anim.getFrame().img.get_width()/2.0,self.position[1]+self.anim.getFrame().img.get_height()/2.0)
     
 
     def imprint(self):

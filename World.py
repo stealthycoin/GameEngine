@@ -56,9 +56,9 @@ class World:
 
 
 
-        for i in len(Sprites):
-            for j in range(i)
-            self.repel(i,j)
+        for i in range(len(self.sprites)):
+            for j in range(i):
+                self.repel(i,j)
 
         for s in self.sprites:
             s.update(dtime)
@@ -73,15 +73,30 @@ class World:
         if self.floating != None:
             self.floating.draw(screen)
 
-    def repel(self.i,j):
+    def repel(self, i, j):
+        def d (a, b):
+            return np.linalg.norm(a-b)
+        def f (v):
+            if v != 0:
+                return 1.0/v;
+            return 4;
+
         i = self.sprites[i]
         j = self.sprites[j]
-        if i cornerCollide(j) or i.cornerCollide(i):
+        if i.cornerCollide(j) or j.cornerCollide(i):
             ic = np.array(i.center())
             jc = np.array(j.center())
+            
             ji = ic - jc
             ji = -1.0/np.linalg.norm(ji) * ji
-
+            ji = f(1.0/d(ic,jc)) * ji
+            j.velocity = ji
+            
+            ij = jc - ic
+            ij = -1.0/np.linalg.norm(ij) * ij
+            ij = f(1.0/d(ic,jc)) * ij
+            i.velocity = ij
+            
         else:
             i.velocity[0]=0
             i.velocity[1]=0
