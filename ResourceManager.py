@@ -5,6 +5,7 @@ import World
 import HUD
 import Sprite
 import re
+import copy
 
 class ResourceManager:
     def __init__(self):
@@ -28,7 +29,8 @@ class ResourceManager:
         self.loadImage("nor","./resources/images/nor.png")
         self.loadImage("xnor","./resources/images/xnor.png")
         self.loadImage("offbulb","./resources/images/offbulb.jpg")
-        self.loadImage("onbulb","./resources/images/onbulb.jpg")
+        self.loadImage("Sink","./resources/images/Sink.jpg")
+        self.loadImage("Source","./resources/images/Source.jpg")
 
     def loadImage(self, name, path, key=None):
         """Loads an image with a name at a given path, and gives it a colorkey"""
@@ -96,11 +98,33 @@ class ResourceManager:
 
         d.setGates(gates)
 
-    
-
-
         w=World.World(d)
+
+        p = re.compile('[Ss](ink|ource) ?\( ?(\d+), ?(\d+) ?\)')
+        i = p.finditer(text)
+        for match in i:
+            x = int(match.group(2))
+            y = int(match.group(3))
+            if (match.group(1)=="ink"):
+                s = Sprite.Sink(self.getImage("Sink"))
+            elif (match.group(1)=="ource"):
+                s = Sprite.Source(self.getImage("Source"))
+            s.position[0] = x
+            s.position[1] = y
+        
+            w.sprites.append(s)
+
+        p = re.compile ("[Gg]ate ?\((.*), ?(\d+), ?(\d+)\)")
+        i = p.finditer(text)
+        for match in i:
+            x = int(match.group(2))
+            y = int(match.group(3))
+            g = copy.deepcopy(stringToGate(match.group(1)))
+            g.position[0] = x
+            g.position[1] = y
+            w.sprites.append(g)
         return w
 
+        
     
     

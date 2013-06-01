@@ -27,6 +27,7 @@ class World:
                         self.floating = s
                         break
                 if self.floating != None:
+                    self.floating.imprint()
                     self.sprites.remove(self.floating)
                         
                         
@@ -40,12 +41,24 @@ class World:
         elif self.floating != None and self.lastFrame == 1 and self.im.buttons[1] == 0:
             #mouse released, place item
             if self.d.containsPoint(self.im.getMouseX(), self.im.getMouseY()):
-                self.d.transistors += self.floating.trans()
-                self.floating = None
+                if self.floating.fixed == False:
+                    self.d.transistors += self.floating.trans()
+                    self.floating = None
+                else:
+                    self.floating.snap()
+                    self.sprites.append(self.floating)
+                    self.floating = None
                 
             else:
                 self.sprites.append(self.floating)
                 self.floating = None
+
+
+
+
+        for i in len(Sprites):
+            for j in range(i)
+            self.repel(i,j)
 
         for s in self.sprites:
             s.update(dtime)
@@ -59,6 +72,21 @@ class World:
         self.d.draw(screen)
         if self.floating != None:
             self.floating.draw(screen)
+
+    def repel(self.i,j):
+        i = self.sprites[i]
+        j = self.sprites[j]
+        if i cornerCollide(j) or i.cornerCollide(i):
+            ic = np.array(i.center())
+            jc = np.array(j.center())
+            ji = ic - jc
+            ji = -1.0/np.linalg.norm(ji) * ji
+
+        else:
+            i.velocity[0]=0
+            i.velocity[1]=0
+            j.velocity[0]=0
+            j.velocity[1]=0
     
         
 

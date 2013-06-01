@@ -19,6 +19,8 @@ class Sprite:
         #position vector
         self.position = np.array([0,0])
 
+        self.fixed = True
+
 
     def __deepcopy__(self,memo):
         newone = type(self)(copy.deepcopy(self.anim))
@@ -43,6 +45,32 @@ class Sprite:
         if x < self.position[0] or x > self.position[0] + self.anim.getFrame().img.get_width() or y < self.position[1] or y > self.position[1] + self.anim.getFrame().img.get_height():
             return False
         return True
+
+    def cornerCollide(self,s):
+        P1 = (self.position[0],self.positon[1])
+        if s.containsPoint(P1):
+            return True
+        P2 = (self.position[0] + self.anim.getFrame().img.get_width(),self.postion[1])
+        if s.containsPoint(P2):
+            return True
+        P3 = (self.position[0],self.positon[1] + self.anim.getFrame().img.get_height())
+        if s.containsPoint(P3):
+            return True
+        P4 = (self.position[0] + self.anim.getFrame().img.get_width(),self.positon[1] + self.anim.getFrame().img.get_height())
+        if s.containsPoint(P4):
+            return True
+
+        return False
+
+    def center(self):
+        return (self.position[0]+sel.anim.getFrame().img.get_width()/2.0,self.position[1]+sel.anim.getFrame().img.get_height()/2.0)
+    
+
+    def imprint(self):
+        self.backup = np.copy(self.position)
+
+    def snap(self):
+        self.position = np.copy(self.backup)
 
     
         #Logic gates
@@ -94,7 +122,15 @@ class Xnor(Gate):
     def trans(self):
         return 6
 
-class Bulb(Sprite):
+class Sink(Sprite):
     def __init__(self,a):
-        pass
+        super(Sink,self).__init__(a)
+
+class Source(Sprite):
+    def __init__(self,a):
+        super(Source,self).__init__(a)
         
+
+
+
+

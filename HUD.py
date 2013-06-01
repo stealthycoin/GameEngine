@@ -40,7 +40,9 @@ class Dispensor:
                 #deduct cost
                 if self.transistors >= g.trans():
                     self.transistors -= g.trans()
-                    return copy.deepcopy(g)
+                    r = copy.deepcopy(g)
+                    r.fixed = False
+                    return r
 
             
 
