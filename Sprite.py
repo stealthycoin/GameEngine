@@ -263,10 +263,14 @@ class Connector:
         self.w = 21
         self.h = 20
         self.link = None
+        
+    def center(self, sx, sy):
+        return [self.x + sx + self.w / 2.0, self.y + sy + self.h / 2.0]
+
     def draw(self,sx,sy,s):
         #pygame.draw.rect(s,[255,0,0],[sx+self.x,sy+self.y,self.w,self.h],1)
         if self.link != None:
-            pygame.draw.line(s,[0,100,255],self.link.center(),[self.x + sx,self.y + sy])
+            pygame.draw.line(s,[0,100,255],self.link.center(), self.center(sx, sy))
 
 
 
