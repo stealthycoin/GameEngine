@@ -11,6 +11,7 @@ class World:
     def reset(self):
         self.sprites=[]
         self.floating=None
+        self.connector=None
         self.offset = [0,0]
 
 
@@ -18,12 +19,28 @@ class World:
         self.d.update(dtime)
 
         if self.lastFrame == 0 and self.im.buttons[1] == 1:
-            #mouse pressed down, try to grab something from dispensor
-            self.floating = self.d.click(self.im.getMouseX(),self.im.getMouseY())
-            if self.floating == None:
-                #try to get a sprite from the game world
+            if self.connector != None:
                 for s in self.sprites:
                     if s.containsPoint(self.im.getMouseX(), self.im.getMouseY()):
+                        self.connector.link = s
+                        self.connector = None
+                        break
+                if self.connector != None:
+                    self.connector.link = None
+                    self.connector = None
+                
+                
+            
+            #mouse pressed down, try to grab something from dispensor
+            self.floating = self.d.click(self.im.getMouseX(),self.im.getMouseY())
+            if self.floating == None and self.connector == None:
+                #try to get a sprite from the game world
+                for s in self.sprites:
+                    c = s.connector(self.im.getMouseX(),self.im.getMouseY())
+                    if c:
+                        self.connector = c
+                        break
+                    elif s.containsPoint(self.im.getMouseX(), self.im.getMouseY()):
                         self.floating = s
                         break
                 if self.floating != None:

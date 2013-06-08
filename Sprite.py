@@ -9,8 +9,7 @@ class Sprite:
         if isinstance(ioa, Animation.Animation): #if it is an animation, load it as such
             self.anim=ioa
         else:#otherwise, it must be an image, make an animation with 1 frame and put the image in that.
-            self.anim=Animation.Animation()
-            self.anim.addFrame(ioa,10)
+            self.convert(ioa)
 
         #acceleration vector
         self.acceleration = np.array([0.0,0.0])
@@ -20,6 +19,10 @@ class Sprite:
         self.position = np.array([0.0,0.0])
 
         self.fixed = True
+
+    def convert(self,img):
+        self.anim=Animation.Animation()
+        self.anim.addFrame(img,10)
 
 
     def __deepcopy__(self,memo):
@@ -38,12 +41,26 @@ class Sprite:
     def draw(self,screen):
         screen.blit(self.anim.getFrame().img,self.position.tolist())
         #() tuple a list that can't be modified
+        if hasattr(self,'a'):
+            self.a.draw(self.position[0],self.position[1],screen)
+        if hasattr(self,'b'):
+            self.b.draw(self.position[0],self.position[1],screen)
 
 
     def containsPoint(self,x,y):
         if x < self.position[0] or x > self.position[0] + self.anim.getFrame().img.get_width() or y < self.position[1] or y > self.position[1] + self.anim.getFrame().img.get_height():
             return False
         return True
+
+    def connector(self,x,y):
+        try:
+            if self.a.containsPoint(self.position[0], self.position[1],x,y):
+                return self.a
+            if self.b.containsPoint(self.position[0], self.position[1],x,y):
+                return self.b
+        except:
+            return None
+        return None
 
     def cornerCollide(self,s):
         P1 = (self.position[0],self.position[1])
@@ -79,56 +96,178 @@ class Gate(Sprite):
     def trigger():
         pass
 
-class And(Gate):
+class SingleIn(Gate):
+    def __init__(self,a):
+        super(SingleIn,self).__init__(a)
+        self.a = Connector(0,15)
+
+class DualIn(Gate):
+    def __init__(self,a):
+        super(DualIn,self).__init__(a)
+        self.a = Connector(0,5)
+        self.b = Connector(0,25)
+
+class And(DualIn):
     def __init__(self,a):
         super(And,self).__init__(a)
     def trans(self):
         return 6
+    def signal(self):
+        try:
+            a = self.a.link.signal()
+            b = self.b.link.signal()
+            if a == None or b == None:
+                return None
+            if a and b:
+                return True
+            return False
+        except:
+            return None
 
-class Or(Gate):
+class Or(DualIn):
     def __init__(self,a):
         super(Or,self).__init__(a)
     def trans(self):
         return 6
+    def signal(self):
+        try:
+            a = self.a.link.signal()
+            b = self.b.link.signal()
+            if a == None or b == None:
+                return None
+            if a or b:
+                return True
+            return False
+        except:
+            return None
 
-class Not(Gate):
+class Not(SingleIn):
     def __init__(self,a):
         super(Not,self).__init__(a)
     def trans(self):
         return 2
+    def signal(self):
+        try:
+            s = self.a.link.signal()
+            if s == True:
+                return False
+            if s == None:
+                return None
+            return True
+        except:
+            return None
 
-class Xor(Gate):
+class Xor(DualIn):
     def __init__(self,a):
         super(Xor,self).__init__(a)
     def trans(self):
         return 6
+    def signal(self):
+        try:
+            a = self.a.link.signal()
+            b = self.b.link.signal()
+            if a == None or b == None:
+                return None
+            if a != b:
+                return True
+            return False
+        except:
+            return None
 
-class Nand(Gate):
+class Nand(DualIn):
     def __init__(self,a):
         super(Nand,self).__init__(a)
     def trans(self):
         return 4
+    def signal(self):
+        try:
+            a = self.a.link.signal()
+            b = self.b.link.signal()
+            if a == None or b == None:
+                return None
+            if not a or not b:
+                return True
+            return False
+        except:
+            return None
 
-class Nor(Gate):
+class Nor(DualIn):
     def __init__(self,a):
         super(Nor,self).__init__(a)
     def trans(self):
         return 4
+    def signal(self):
+        try:
+            a = self.a.link.signal()
+            b = self.b.link.signal()
+            if a == None or b == None:
+                return None
+            if not a and not b:
+                return True
+            return False
+        except:
+            return None
 
-class Xnor(Gate):
+class Xnor(DualIn):
     def __init__(self,a):
         super(Xnor,self).__init__(a)
     def trans(self):
         return 6
+    def signal(self):
+        try:
+            a = self.a.link.signal()
+            b = self.b.link.signal()
+            if a == None or b == None:
+                return None
+            if a == b:
+                return True
+            return False
+        except:
+            return None
+    
 
 class Sink(Sprite):
     def __init__(self,a):
         super(Sink,self).__init__(a)
+        self.a = Connector(14, 31)
+    def check(self):
+        if self.a.link != None:
+            if self.a.link.signal() == True:
+                self.convert(self.on)
+            else:
+                self.convert(self.off)
+        else:
+            self.convert(self.off)
+    def update(self,dt):
+        self.check()
+        Sprite.update(self,dt)
+            
+        
 
 class Source(Sprite):
     def __init__(self,a):
         super(Source,self).__init__(a)
-        
+    def signal(self):
+        return True
+
+class Connector:
+    def containsPoint(self,sx,sy,x,y):
+        if sx+self.x<=x and x <= sx+self.x+self.w:
+            if sy+self.y<=y and y<= sy+self.y + self.h:
+                return True
+        else:
+            return False
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+        self.w = 21
+        self.h = 20
+        self.link = None
+    def draw(self,sx,sy,s):
+        #pygame.draw.rect(s,[255,0,0],[sx+self.x,sy+self.y,self.w,self.h],1)
+        if self.link != None:
+            pygame.draw.line(s,[0,100,255],self.link.center(),[self.x + sx,self.y + sy])
+
 
 
 

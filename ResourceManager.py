@@ -29,7 +29,7 @@ class ResourceManager:
         self.loadImage("nor","./resources/images/nor.png")
         self.loadImage("xnor","./resources/images/xnor.png")
         self.loadImage("offbulb","./resources/images/offbulb.jpg")
-        self.loadImage("Sink","./resources/images/Sink.jpg")
+        self.loadImage("onbulb","./resources/images/onbulb.jpg")
         self.loadImage("Source","./resources/images/Source.png")
 
     def loadImage(self, name, path, key=None):
@@ -106,7 +106,10 @@ class ResourceManager:
             x = int(match.group(2))
             y = int(match.group(3))
             if (match.group(1)=="ink"):
-                s = Sprite.Sink(self.getImage("Sink"))
+                s = Sprite.Sink(self.getImage("offbulb"))
+                s.off = self.getImage("offbulb")
+                s.on = self.getImage("onbulb")
+                
             elif (match.group(1)=="ource"):
                 s = Sprite.Source(self.getImage("Source"))
             s.position[0] = x
